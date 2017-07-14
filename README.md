@@ -7,7 +7,7 @@ A Python wrapper for the MR3040.
 
 #### Setting Up Device
 Instructions heavily based on the [minipwner](http://www.minipwner.com/index.php/build-one).
-1. Have a TP-Link MR3040, USB flash drive, Wi-Fi internet connection, and an Ethernet cable.
+1. Have a [TP-Link MR3040](https://www.amazon.com/gp/product/B0088PPFP4/), [USB flash drive](https://www.amazon.com/gp/product/B005FYNSZA/), Wi-Fi internet connection, and an Ethernet cable.
 2. Partition the USB flash drive with a tool like [Partition Wizard](https://www.partitionwizard.com/) or [gparted](http://gparted.org/)
 to have about 96% ext4 and the rest as Linux swap.
 3. Download the [OpenWrt image builder](https://downloads.openwrt.org/chaos_calmer/15.05.1/ar71xx/generic/OpenWrt-ImageBuilder-15.05.1-ar71xx-generic.Linux-x86_64.tar.bz2)
@@ -59,4 +59,28 @@ umount /tmp/cproot
 4. ```reboot```
 
 #### Using
-PwnSSHH with automatically start on boot and will cycle the leds to indicate startup. 
+1. PwnSSHH with automatically start on boot and will cycle the leds to indicate startup. 
+2. The program can be started manually with ```python /root/PwnSSHH/main.py```.
+
+#### API
+If you want to write your own code, the ```pwnsshh``` module will allow one to interface
+(read switch state, control leds, init configs, etc...) with the router.
+
+For example
+```python
+from pwnsshh.leds import all_off, leds
+
+import time
+
+while True:
+
+    all_off() # Turn all leds off
+
+    for led in leds: # Cycle though
+
+        led.on = True
+
+        time.sleep(.5)
+
+        led.on = False
+```

@@ -36,7 +36,7 @@ def all_off():
 
     for led in leds: led.on = False
 
-def cycle(delay=0.3):
+def cycle(delay=0.5):
 
     all_off()
 
