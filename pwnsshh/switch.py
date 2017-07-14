@@ -5,7 +5,7 @@ switches = ['3G', 'WISP', 'AP']
 
 def _get_state(device):
 
-    return os.popen("grep -i {} /sys/kernel/debug/gpio".format(device)).read().strip().split(" ")[-1] == "hi"
+    return "hi" in os.popen("grep -i {} /sys/kernel/debug/gpio".format(device)).read()
 
 def get_switch_id():
 

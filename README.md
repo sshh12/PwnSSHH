@@ -40,7 +40,7 @@ config 'mount'
         option enabled '1'
         option enabled_fsck '0'
 ```
-9. Pivot the root onto the USB drive with the following commands...
+9. Pivot the root onto the USB drive with the following commands:
 ```
 mkdir -p /tmp/cproot
 mount -o bind / /tmp/cproot
@@ -63,24 +63,30 @@ umount /tmp/cproot
 2. The program can be started manually with ```python /root/PwnSSHH/main.py```.
 
 #### API
-If you want to write your own code, the ```pwnsshh``` module will allow one to interface
+If you want to write your own code, the ```pwnsshh``` lib will allow you to interface
 (read switch state, control leds, init configs, etc...) with the router.
 
-For example
+For example:
 ```python
+from pwnsshh.switch import get_switch_id
 from pwnsshh.leds import all_off, leds
 
 import time
 
-while True:
+all_off() # Turn all leds off
 
-    all_off() # Turn all leds off
+last_pos = 0
 
-    for led in leds: # Cycle though
+while True: # Poll switch state
 
-        led.on = True
-
-        time.sleep(.5)
-
-        led.on = False
+    switch = get_switch_id() # Index of the switch position {0, 1, 2}
+	
+	if switch != last_pos: 
+	
+		leds[last_pos].on = False
+		leds[switch].on = True # Light matching led
+	
+		last_pos = switch
+		
+	time.sleep(1) # Commands can get buggy if not enough delay
 ```

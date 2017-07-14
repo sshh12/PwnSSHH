@@ -80,7 +80,7 @@ CFG_AP = Config('AP')
 CFG_AP.load('firewall', 'firewall')
 CFG_AP.load('wireless', 'wireless-ap')
 CFG_AP.load('network', 'network-ap')
-CFG_CLIENT_AP.load('dhcp', 'dhcp-ap')
+CFG_AP.load('dhcp', 'dhcp-ap')
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
