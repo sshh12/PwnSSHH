@@ -1,8 +1,12 @@
 
+import json
 import sys
 import os
 
 print('Setting up PwnSSHH...')
+
+def confirm(prompt):
+    return 'y' in raw_input(prompt + " (y/n) > ").lower()
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
@@ -10,6 +14,24 @@ if not os.path.isfile('/root/PwnSSHH/main.py'):
 
     print('(Error) Program in wrong directory.')
     sys.exit(1)
+
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+settings_template = """
+{
+  "modes":{
+    "client-ap":{
+      "ssid":"",
+      "passwd":""
+    }
+  }
+}
+"""
+
+if confirm("Create/Override settings.json")
+
+    with open('/root/root/PwnSSHH/settings.json', 'w') as settings_file:
+        settings_file.write(settings_template)
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
@@ -61,12 +83,22 @@ os.system('/etc/init.d/pwnsshh enable')
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
-if 'y' in raw_input('Setup client ap networking? (y/n) > ').lower():
+if confirm('Setup client ap networking'):
 
     from pwnsshh.configs import CFG_CLIENT_AP
 
-    CFG_CLIENT_AP.set_SSID(raw_input('Your wifi name > '))
-    CFG_CLIENT_AP.set_passwd(raw_input('Your wifi password > '))
+    ssid = raw_input('Your wifi name > ')
+    passwd = raw_input('Your wifi password > ')
+
+    CFG_CLIENT_AP.set_SSID(ssid)
+    CFG_CLIENT_AP.set_passwd(passwd)
+
+    settings = json.load(open('/root/PwnSSHH/settings.json', 'r'))
+
+    settings['modes']['client-ap']['ssid'] = ssid
+    settings['modes']['client-ap']['passwd'] = passwd
+
+    json.dump(settings, open('/root/PwnSSHH/settings.json', 'w'))
 
     CFG_CLIENT_AP.run()
 
@@ -87,7 +119,7 @@ print('Connected!')
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
-if 'y' in raw_input('Download packages? (y/n) > ').lower():
+if confirm('Download packages'):
 
     os.system('opkg update')
     os.system('opkg install python-pip')
