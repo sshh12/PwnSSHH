@@ -4,7 +4,7 @@ from pwnsshh.configs import *
 import os
 
 class Config(object):
-
+    """System Configuration Files object."""
     def __init__(self, name):
 
         self.name = name
@@ -21,7 +21,22 @@ class Config(object):
         self.dhcp = self.dhcp.replace(target, new_text)
 
     def load(self, cfg, fn):
+        """
+        Loads a config file.
 
+        Takes a file from the config/ dir and loads it into the object as a str.
+
+        Parameters
+        ----------
+        cfg : str
+            The type of config file {network, wireless, firewall, dhcp}
+        fn : str
+            The filename of the config file
+
+        Note
+        ----
+        All filenames are relative to the config/ dir in /root/PwnSSHH/
+        """
         with open('/root/PwnSSHH/configs/' + fn, 'r') as config_file:
 
             if cfg == 'network':
@@ -37,15 +52,26 @@ class Config(object):
                 self.dhcp = config_file.read()
 
     def set_SSID(self, ssid):
-
+        """Sets global value for SSID/Wifi Name."""
         self._replace_all("WIFI-SSID", ssid)
 
     def set_passwd(self, passwd):
-
+        """Sets global value for Wifi password."""
         self._replace_all("WIFI-PASS", passwd)
 
     def run(self):
+        """
+        Activates Configuration.
 
+        This will override active config files with the configuration
+        created within this object and will restart network services.
+
+        Note
+        ----
+        If a config file is not loaded for one of the types it will be overriden
+        with a blank configuration so its best to always load a file for every
+        config type.
+        """
         with open('/etc/config/network', 'w') as config_file:
             config_file.write(self.network)
 

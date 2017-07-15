@@ -13,9 +13,9 @@ to have about 96% ext4 and the rest as Linux swap.
 3. Download the [OpenWrt image builder](https://downloads.openwrt.org/chaos_calmer/15.05.1/ar71xx/generic/OpenWrt-ImageBuilder-15.05.1-ar71xx-generic.Linux-x86_64.tar.bz2)
 and uncompress (```tar xvzf {filename}```).
 4. ```make image PROFILE=TLMR3040 PACKAGES="blkid block-mount kmod-fs-ext4 kmod-usb2 kmod-usb-uhci kmod-usb-ohci kmod-usb-storage"```
-5. Rename the created image file ```bin/ar71xx/...-v2-squashfs-factory.bin``` to ```openwrt.bin```
+5. Rename the created image file ```bin/ar71xx/openwrt-15.05.1-ar71xx-generic-tl-mr3040-v2-squashfs-factory.bin``` to ```openwrt.bin```
 6. Put the switch on 3G/4G, connect it to your computer with an Ethernet cord, and power on the device.
-5. Navigate to the TP-Link control panel at ```http://192.168.0.1```, then go to System tools -> Firmware Upgrade and upload the openwrt image file.
+5. Navigate to the TP-Link control panel at ```http://192.168.0.1```, then go to System tools -> Firmware Upgrade and upload the ```openwrt.bin``` image file.
 6. ```telnet 192.168.1.1 23``` and set the password ```passwd``` to enable ssh (no longer need telnet).
 7. ```ssh root@192.168.1.1```
 8. Edit the fstab config ```vi /etc/config/fstab``` where partitions can be ```sda1``` or ```sda2```
@@ -59,7 +59,7 @@ umount /tmp/cproot
 4. ```reboot```
 
 #### Using
-1. PwnSSHH with automatically start on boot and will cycle the leds to indicate startup. 
+1. PwnSSHH with automatically start on boot and will cycle the leds to indicate startup.
 2. The program can be started manually with ```python /root/PwnSSHH/main.py```.
 
 #### API
@@ -73,20 +73,20 @@ from pwnsshh.leds import all_off, leds
 
 import time
 
-all_off() # Turn all leds off
+all_off() # Turn off all leds
 
 last_pos = 0
 
 while True: # Poll switch state
 
     switch = get_switch_id() # Index of the switch position {0, 1, 2}
-	
-	if switch != last_pos: 
-	
-		leds[last_pos].on = False
-		leds[switch].on = True # Light matching led
-	
-		last_pos = switch
-		
-	time.sleep(1) # Commands can get buggy if not enough delay
+
+    if switch != last_pos:
+
+        leds[last_pos].on = False
+        leds[switch].on = True # Light corresponding led
+
+        last_pos = switch
+
+    time.sleep(1) # Commands can get buggy if not enough delay
 ```

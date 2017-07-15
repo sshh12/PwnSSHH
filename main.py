@@ -22,8 +22,8 @@ def main():
 
     elif switch == 1:
 
-        CFG_AP.set_SSID('Hotspot')
-        CFG_AP.set_passwd('1234567890')
+        CFG_AP.set_SSID(settings['modes']['ap']['ssid'])
+        CFG_AP.set_passwd(settings['modes']['ap']['passwd'])
         CFG_AP.run()
 
 

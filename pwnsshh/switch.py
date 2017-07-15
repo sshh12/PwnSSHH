@@ -1,14 +1,14 @@
 
 import os
 
-switches = ['3G', 'WISP', 'AP']
+switches = ['3G', 'WISP', 'AP'] # Switch Names
 
 def _get_state(device):
 
     return "hi" in os.popen("grep -i {} /sys/kernel/debug/gpio".format(device)).read()
 
 def get_switch_id():
-
+    """Returns the current index of the switch on the side of the router. {0, 1, 2}"""
     sw1 = _get_state('sw1')
     sw2 = _get_state('sw2')
 
@@ -22,5 +22,5 @@ def get_switch_id():
         return 2
 
 def get_switch_name():
-
+    """Returns the name of the current switch position."""
     return switches[get_switch_id()]
